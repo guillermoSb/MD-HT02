@@ -83,13 +83,13 @@ El VAT si demuestra patrones de agrupamiento, por lo que podemos confiar en el r
 fviz_nbclust(movies[, importantCols], kmeans, method = "wss") +
 labs(subtitle = "Elbow method")
 ```
-El número óptimo de clusters es 4. FALTA EXPANDIR
+El número óptimo de clusters es 2. FALTA EXPANDIR
 
 ## 4. Clustering
 
 ### K-Means
 ```{r kmedias}
-km <- kmeans(cols_norm, centers = 4, iter.max = 100) 
+km <- kmeans(cols_norm, centers = 2, iter.max = 100) 
 ```
 
 ```{r}
@@ -103,8 +103,9 @@ fviz_cluster(km, cols_norm)
 ### Clustering Jerarquico
 
 ```{r}
-hc <- hc(dist(cols_norm), method = "complete")
-fit <- cutree(hc, k = 4)
+hc<-hclust(datos_dist, method = "ward.D2") #Genera cluster jerarquico
+plot(hc, cex=0.5, axes=FALSE) #Genera el dendograma
+rect.hclust(hc,k=3)
 ```
 
 ```{r}
