@@ -20,7 +20,7 @@ library(GGally) #Para hacer el conjunto de graficos
 library(FeatureImpCluster) #Para revisar la importancia de las variables en los grupos.
 library(pheatmap) #Para hacer mapa de calor
 library(dplyr)
-
+library(ggrepel)
 ```
 
 ## 1 Prepocesamiento
@@ -97,16 +97,31 @@ El número óptimo de clusters es 2. FALTA EXPANDIR
 ```{r kmedias}
 km <- kmeans(cols_norm, centers = 2, iter.max = 100) 
 fviz_cluster(km, cols_norm)
+km$size
 ```
 
 
 ### Clustering Jerarquico
 
 ```{r}
-hc<-hclust(distancia_prueba, method = "ward.D2") #Genera cluster jerarquico
+hc<-hclust(datos_dist, method = "ward.D2") #Genera cluster jerarquico
 plot(hc, cex=0.5, axes=FALSE) #Genera el dendograma
 rect.hclust(hc,k=2)
 
 ```
+
+## 5. Interpretación de los grupos
+
+```{r}
+m <- data.frame(withinss=km$withinss, size=km$size)
+ggplot(m, aes(size, withinss)) + geom_point() + geom_smooth(method = "lm") + geom_text_repel(label=rownames(m))
+```
+
+
+
+
+
+
+
 
 
