@@ -25,6 +25,7 @@ library(dplyr)
 
 ## 1 Prepocesamiento
 ```{r,warning=FALSE}
+set.seed(123)
 movies <- read.csv("movies.csv")
 
 # Add release_year and release_month
@@ -53,18 +54,23 @@ print(summary(movies[,importantCols]))
 
 ``` {r}
 # Define important columns for Hopkins and VAT
-importantCols <- c("budget", "revenue", "popularity", "voteAvg", "genresAmount","releaseYear", "releaseMonth", "actorsAmount", "averageActorPopularities")
+importantCols <- movies[,c("budget", "revenue", "popularity", "voteAvg", "genresAmount","releaseYear", "releaseMonth", "actorsAmount", "averageActorPopularities")]
+
 # Normalizar variables numericas
-cols_norm <- movies[,importantCols] <- mutate_if(movies[,importantCols], is.numeric, scale)
+cols_norm <- mutate_if(importantCols, is.numeric, scale)
 ```
 
+
+## Determinar si vale la pena agruparlas
+
 ### Hopkins
-```{r}
-seed <- 1407
-set.seed(seed)
-hopkins_statistichopkins_statistic <- hopkins(movies[, importantCols], m=1000)
+```{r hopkins}
+h <- hopkins(cols_norm)
+distancia_prueba <- dist(cols_norm)
+fviz_dist(distancia_prueba, show_labels = F)
 ```
-El resultado del test de Hopkins es `r hopkins_statistic`, el valor es cercano a 1, según la librería que se está utilizando esto indica una tendencia a clustering alta.
+El resultado del test de Hopkins es `r round(h, 2)`, el valor es cercano a 1, según la librería que se está utilizando esto indica una tendencia a clustering alta y si vale la pena agrupar.
+
 
 ### VAT
 
@@ -75,13 +81,13 @@ fviz_dist(datos_dist, show_labels = F, gradient = list(low = "#000000", mid = "w
 ```
 El VAT si demuestra patrones de agrupamiento, por lo que podemos confiar en el resultado del test de Hopkins.
 
-## 3 Determinar el numero de clusters adecuado
 
+## 3 Determinar el numero de clusters adecuado
 
 ```{r metodo de codo factoextra}
 
-fviz_nbclust(movies[, importantCols], kmeans, method = "wss") +
-labs(subtitle = "Elbow method")
+fviz_nbclust(cols_norm, kmeans, method = "wss")
+fviz_nbclust(cols_norm, kmeans, method = "silhouette")
 ```
 El número óptimo de clusters es 2. FALTA EXPANDIR
 
@@ -90,25 +96,17 @@ El número óptimo de clusters es 2. FALTA EXPANDIR
 ### K-Means
 ```{r kmedias}
 km <- kmeans(cols_norm, centers = 2, iter.max = 100) 
-```
-
-```{r}
-km
-```
-
-```{r}
 fviz_cluster(km, cols_norm)
 ```
+
 
 ### Clustering Jerarquico
 
 ```{r}
 hc<-hclust(datos_dist, method = "ward.D2") #Genera cluster jerarquico
 plot(hc, cex=0.5, axes=FALSE) #Genera el dendograma
-rect.hclust(hc,k=3)
+rect.hclust(hc,k=2)
+
 ```
 
-```{r}
-fviz_cluster(fit, cols_norm)
-```
 
