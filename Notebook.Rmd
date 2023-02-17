@@ -8,6 +8,7 @@ output: html_notebook
 Librerías
 ```{r}
 library(hopkins)
+library(dplyr)
 library(cluster) #Para calcular la silueta
 library(e1071)#para cmeans
 library(mclust) #mixtures of gaussians
@@ -36,6 +37,7 @@ splittedPopularities <- strsplit(movies$actorsPopularity, "\\|")
 averagePopularities <- unlist(lapply(lapply(splittedPopularities, as.numeric), mean))
 movies$averageActorPopularities <- averagePopularities
 movies <- na.omit(movies)
+
 ```
 Resumen de columnas a utilizar para Clustering:
 
@@ -51,14 +53,15 @@ print(summary(movies[,importantCols]))
 ``` {r}
 # Define important columns for Hopkins and VAT
 importantCols <- c("budget", "revenue", "popularity", "voteAvg", "genresAmount","releaseYear", "releaseMonth", "actorsAmount", "averageActorPopularities")
-
+# Normalizar variables numericas
+movies[,importantCols] <- mutate_if(movies[,importantCols], is.numeric, scale)
 ```
 
 ### Hopkins
 ```{r}
 seed <- 1407
 set.seed(seed)
-hopkins_statistic <- hopkins(movies[, importantCols], m=1000)
+hopkins_statistichopkins_statistic <- hopkins(movies[, importantCols], m=1000)
 ```
 El resultado del test de Hopkins es `r hopkins_statistic`, el valor es cercano a 1, según la librería que se está utilizando esto indica una tendencia a clustering alta.
 
@@ -79,4 +82,4 @@ El VAT si demuestra patrones de agrupamiento, por lo que podemos confiar en el r
 fviz_nbclust(movies[, importantCols], kmeans, method = "wss") +
 labs(subtitle = "Elbow method")
 ```
-El número óptimo de clusters es 3. FALTA EXPANDIR
+El número óptimo de clusters es 4. FALTA EXPANDIR
