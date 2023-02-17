@@ -105,7 +105,7 @@ fviz_cluster(km, cols_norm)
 ```{r}
 hc<-hclust(datos_dist, method = "ward.D2") #Genera cluster jerarquico
 plot(hc, cex=0.5, axes=FALSE) #Genera el dendograma
-rect.hclust(hc,k=3)
+rect.hclust(hc,k=2)
 ```
 
 
