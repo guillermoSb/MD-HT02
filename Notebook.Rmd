@@ -62,7 +62,7 @@ cols_norm <- movies[,importantCols] <- mutate_if(movies[,importantCols], is.nume
 ```{r}
 seed <- 1407
 set.seed(seed)
-hopkins_statistichopkins_statistic <- hopkins(movies[, importantCols], m=1000)
+hopkins_statistic<- hopkins(movies[, importantCols], m=1000)
 ```
 El resultado del test de Hopkins es `r hopkins_statistic`, el valor es cercano a 1, según la librería que se está utilizando esto indica una tendencia a clustering alta.
 
@@ -83,7 +83,7 @@ El VAT si demuestra patrones de agrupamiento, por lo que podemos confiar en el r
 fviz_nbclust(movies[, importantCols], kmeans, method = "wss") +
 labs(subtitle = "Elbow method")
 ```
-El número óptimo de clusters es 2. FALTA EXPANDIR
+El número óptimo de clusters es 2.
 
 ## 4. Clustering
 
@@ -108,7 +108,4 @@ plot(hc, cex=0.5, axes=FALSE) #Genera el dendograma
 rect.hclust(hc,k=3)
 ```
 
-```{r}
-fviz_cluster(fit, cols_norm)
-```
 
