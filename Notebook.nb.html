@@ -1752,31 +1752,63 @@ display: none;
 
 
 <!-- rnb-text-begin -->
-<p>This is an <a href="http://rmarkdown.rstudio.com">R Markdown</a>
-Notebook. When you execute code within the notebook, the results appear
-beneath the code.</p>
-<p>Try executing this chunk by clicking the <em>Run</em> button within
-the chunk or by placing your cursor inside it and pressing
-<em>Cmd+Shift+Enter</em>.</p>
+<div id="hoja-de-trabajo-02" class="section level1">
+<h1>Hoja de Trabajo 02</h1>
+<p>Librerías</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGxvdChjYXJzKVxuYGBgIn0= -->
-<pre class="r"><code>plot(cars)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShGTk4pXG5cbmBgYCJ9 -->
+<pre class="r"><code>library(FNN)
+</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Add a new chunk by clicking the <em>Insert Chunk</em> button on the
-toolbar or by pressing <em>Cmd+Option+I</em>.</p>
-<p>When you save the notebook, an HTML file containing the code and
-output will be saved alongside it (click the <em>Preview</em> button or
-press <em>Cmd+Shift+K</em> to preview the HTML file).</p>
-<p>The preview shows you a rendered HTML copy of the contents of the
-editor. Consequently, unlike <em>Knit</em>, <em>Preview</em> does not
-run any R code chunks. Instead, the output of the chunk when it was last
-run in the editor is displayed.</p>
+<p>Cargando y Preparando Dataset</p>
 <!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubW92aWVzIDwtIHJlYWQuY3N2KFwibW92aWVzLmNzdlwiKVxuXG4jIEFkZCByZWxlYXNlX3llYXIgYW5kIHJlbGVhc2VfbW9udGhcbnllYXJzIDwtIGMoYXMuUE9TSVhsdChtb3ZpZXMkcmVsZWFzZURhdGUpJHllYXIgKyAxOTAwKVxubW9udGhzIDwtIGMoYXMuUE9TSVhsdChtb3ZpZXMkcmVsZWFzZURhdGUpJG1vbiArIDEpXG5tb3ZpZXMkcmVsZWFzZVllYXIgPSB5ZWFyc1xubW92aWVzJHJlbGVhc2VNb250aCA9IG1vbnRoc1xuXG4jIEFkZCBhdmVyYWdlIGFjdG9yIHBvcHVsYXJpdHlcbnNwbGl0dGVkUG9wdWxhcml0aWVzIDwtIHN0cnNwbGl0KG1vdmllcyRhY3RvcnNQb3B1bGFyaXR5LCBcIlxcXFx8XCIpXG5cbmF2ZXJhZ2VQb3B1bGFyaXRpZXMgPC0gdW5saXN0KGxhcHBseShsYXBwbHkoc3BsaXR0ZWRQb3B1bGFyaXRpZXMsIGFzLm51bWVyaWMpLCBtZWFuKSlcbmBgYCJ9 -->
+<pre class="r"><code>movies &lt;- read.csv(&quot;movies.csv&quot;)
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiSG9qYSBkZSBUcmFiYWpvIDAyIgpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sKLS0tCgpUaGlzIGlzIGFuIFtSIE1hcmtkb3duXShodHRwOi8vcm1hcmtkb3duLnJzdHVkaW8uY29tKSBOb3RlYm9vay4gV2hlbiB5b3UgZXhlY3V0ZSBjb2RlIHdpdGhpbiB0aGUgbm90ZWJvb2ssIHRoZSByZXN1bHRzIGFwcGVhciBiZW5lYXRoIHRoZSBjb2RlLiAKClRyeSBleGVjdXRpbmcgdGhpcyBjaHVuayBieSBjbGlja2luZyB0aGUgKlJ1biogYnV0dG9uIHdpdGhpbiB0aGUgY2h1bmsgb3IgYnkgcGxhY2luZyB5b3VyIGN1cnNvciBpbnNpZGUgaXQgYW5kIHByZXNzaW5nICpDbWQrU2hpZnQrRW50ZXIqLiAKCmBgYHtyfQpwbG90KGNhcnMpCmBgYAoKQWRkIGEgbmV3IGNodW5rIGJ5IGNsaWNraW5nIHRoZSAqSW5zZXJ0IENodW5rKiBidXR0b24gb24gdGhlIHRvb2xiYXIgb3IgYnkgcHJlc3NpbmcgKkNtZCtPcHRpb24rSSouCgpXaGVuIHlvdSBzYXZlIHRoZSBub3RlYm9vaywgYW4gSFRNTCBmaWxlIGNvbnRhaW5pbmcgdGhlIGNvZGUgYW5kIG91dHB1dCB3aWxsIGJlIHNhdmVkIGFsb25nc2lkZSBpdCAoY2xpY2sgdGhlICpQcmV2aWV3KiBidXR0b24gb3IgcHJlc3MgKkNtZCtTaGlmdCtLKiB0byBwcmV2aWV3IHRoZSBIVE1MIGZpbGUpLiAKClRoZSBwcmV2aWV3IHNob3dzIHlvdSBhIHJlbmRlcmVkIEhUTUwgY29weSBvZiB0aGUgY29udGVudHMgb2YgdGhlIGVkaXRvci4gQ29uc2VxdWVudGx5LCB1bmxpa2UgKktuaXQqLCAqUHJldmlldyogZG9lcyBub3QgcnVuIGFueSBSIGNvZGUgY2h1bmtzLiBJbnN0ZWFkLCB0aGUgb3V0cHV0IG9mIHRoZSBjaHVuayB3aGVuIGl0IHdhcyBsYXN0IHJ1biBpbiB0aGUgZWRpdG9yIGlzIGRpc3BsYXllZC4KCg==</div>
+# Add release_year and release_month
+years &lt;- c(as.POSIXlt(movies$releaseDate)$year + 1900)
+months &lt;- c(as.POSIXlt(movies$releaseDate)$mon + 1)
+movies$releaseYear = years
+movies$releaseMonth = months
+
+# Add average actor popularity
+splittedPopularities &lt;- strsplit(movies$actorsPopularity, &quot;\\|&quot;)
+
+averagePopularities &lt;- unlist(lapply(lapply(splittedPopularities, as.numeric), mean))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogTkFzIGludHJvZHVjZWQgYnkgY29lcmNpb25XYXJuaW5nOiBOQXMgaW50cm9kdWNlZCBieSBjb2VyY2lvbldhcm5pbmc6IE5BcyBpbnRyb2R1Y2VkIGJ5IGNvZXJjaW9uV2FybmluZzogTkFzIGludHJvZHVjZWQgYnkgY29lcmNpb25XYXJuaW5nOiBOQXMgaW50cm9kdWNlZCBieSBjb2VyY2lvbldhcm5pbmc6IE5BcyBpbnRyb2R1Y2VkIGJ5IGNvZXJjaW9uV2FybmluZzogTkFzIGludHJvZHVjZWQgYnkgY29lcmNpb25XYXJuaW5nOiBOQXMgaW50cm9kdWNlZCBieSBjb2VyY2lvbldhcm5pbmc6IE5BcyBpbnRyb2R1Y2VkIGJ5IGNvZXJjaW9uV2FybmluZzogTkFzIGludHJvZHVjZWQgYnkgY29lcmNpb25XYXJuaW5nOiBOQXMgaW50cm9kdWNlZCBieSBjb2VyY2lvbldhcm5pbmc6IE5BcyBpbnRyb2R1Y2VkIGJ5IGNvZXJjaW9uV2FybmluZzogTkFzIGludHJvZHVjZWQgYnkgY29lcmNpb25XYXJuaW5nOiBOQXMgaW50cm9kdWNlZCBieSBjb2VyY2lvbldhcm5pbmc6IE5BcyBpbnRyb2R1Y2VkIGJ5IGNvZXJjaW9uV2FybmluZzogTkFzIGludHJvZHVjZWQgYnkgY29lcmNpb25XYXJuaW5nOiBOQXMgaW50cm9kdWNlZCBieSBjb2VyY2lvbldhcm5pbmc6IE5BcyBpbnRyb2R1Y2VkIGJ5IGNvZXJjaW9uV2FybmluZzogTkFzIGludHJvZHVjZWQgYnkgY29lcmNpb25XYXJuaW5nOiBOQXMgaW50cm9kdWNlZCBieSBjb2VyY2lvbldhcm5pbmc6IE5BcyBpbnRyb2R1Y2VkIGJ5IGNvZXJjaW9uV2FybmluZzogTkFzIGludHJvZHVjZWQgYnkgY29lcmNpb25XYXJuaW5nOiBOQXMgaW50cm9kdWNlZCBieSBjb2VyY2lvbldhcm5pbmc6IE5BcyBpbnRyb2R1Y2VkIGJ5IGNvZXJjaW9uV2FybmluZzogTkFzIGludHJvZHVjZWQgYnkgY29lcmNpb25XYXJuaW5nOiBOQXMgaW50cm9kdWNlZCBieSBjb2VyY2lvbldhcm5pbmc6IE5BcyBpbnRyb2R1Y2VkIGJ5IGNvZXJjaW9uV2FybmluZzogTkFzIGludHJvZHVjZWQgYnkgY29lcmNpb25XYXJuaW5nOiBOQXMgaW50cm9kdWNlZCBieSBjb2VyY2lvbldhcm5pbmc6IE5BcyBpbnRyb2R1Y2VkIGJ5IGNvZXJjaW9uV2FybmluZzogTkFzIGludHJvZHVjZWQgYnkgY29lcmNpb25XYXJuaW5nOiBOQXMgaW50cm9kdWNlZCBieSBjb2VyY2lvbldhcm5pbmc6IE5BcyBpbnRyb2R1Y2VkIGJ5IGNvZXJjaW9uXG4ifQ== -->
+<pre><code>Warning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercionWarning: NAs introduced by coercion</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubW92aWVzJGF2ZXJhZ2VBY3RvclBvcHVsYXJpdGllcyA8LSBhdmVyYWdlUG9wdWxhcml0aWVzXG5cbiMgRGVmaW5lIGltcG9ydGFudCBjb2x1bW5zIGZvciBjbHVzdGVyIGFsZ29yaXRobXNcbmltcG9ydGFudENvbHMgPC0gYyhcImJ1ZGdldFwiLCBcInJldmVudWVcIiwgXCJwb3B1bGFyaXR5XCIsIFwidm90ZUF2Z1wiLCBcInZvdGVDb3VudFwiLCBcImdlbnJlc0Ftb3VudFwiLCBcInByb2R1Y3Rpb25Db0Ftb3VudFwiLCBcInByb2R1Y3Rpb25Db3VudHJpZXNBbW91bnRcIiwgXCJhY3RvcnNBbW91bnRcIiAsIFwiY2FzdFdvbWVuQW1vdW50XCIsIFwiY2FzdE1lbkFtb3VudFwiLCBcInJlbGVhc2VZZWFyXCIsIFwicmVsZWFzZU1vbnRoXCIpXG5cbmBgYCJ9 -->
+<pre class="r"><code>movies$averageActorPopularities &lt;- averagePopularities
+
+# Define important columns for cluster algorithms
+importantCols &lt;- c(&quot;budget&quot;, &quot;revenue&quot;, &quot;popularity&quot;, &quot;voteAvg&quot;, &quot;voteCount&quot;, &quot;genresAmount&quot;, &quot;productionCoAmount&quot;, &quot;productionCountriesAmount&quot;, &quot;actorsAmount&quot; , &quot;castWomenAmount&quot;, &quot;castMenAmount&quot;, &quot;releaseYear&quot;, &quot;releaseMonth&quot;)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<div id="prepocesamiento" class="section level2">
+<h2>1 Prepocesamiento</h2>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="tendencia-de-agrupamiento" class="section level2">
+<h2>2 Tendencia de Agrupamiento</h2>
+<div id="hopkins" class="section level3">
+<h3>Hopkins</h3>
+<!-- rnb-text-end -->
+</div>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiSG9qYSBkZSBUcmFiYWpvIDAyIgpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sKLS0tCgojIEhvamEgZGUgVHJhYmFqbyAwMgoKTGlicmVyw61hcwpgYGB7cn0KbGlicmFyeShGTk4pCgpgYGAKCkNhcmdhbmRvIHkgUHJlcGFyYW5kbyBEYXRhc2V0CmBgYHtyfQptb3ZpZXMgPC0gcmVhZC5jc3YoIm1vdmllcy5jc3YiKQoKIyBBZGQgcmVsZWFzZV95ZWFyIGFuZCByZWxlYXNlX21vbnRoCnllYXJzIDwtIGMoYXMuUE9TSVhsdChtb3ZpZXMkcmVsZWFzZURhdGUpJHllYXIgKyAxOTAwKQptb250aHMgPC0gYyhhcy5QT1NJWGx0KG1vdmllcyRyZWxlYXNlRGF0ZSkkbW9uICsgMSkKbW92aWVzJHJlbGVhc2VZZWFyID0geWVhcnMKbW92aWVzJHJlbGVhc2VNb250aCA9IG1vbnRocwoKIyBBZGQgYXZlcmFnZSBhY3RvciBwb3B1bGFyaXR5CnNwbGl0dGVkUG9wdWxhcml0aWVzIDwtIHN0cnNwbGl0KG1vdmllcyRhY3RvcnNQb3B1bGFyaXR5LCAiXFx8IikKYXZlcmFnZVBvcHVsYXJpdGllcyA8LSB1bmxpc3QobGFwcGx5KGxhcHBseShzcGxpdHRlZFBvcHVsYXJpdGllcywgYXMubnVtZXJpYyksIG1lYW4pKQptb3ZpZXMkYXZlcmFnZUFjdG9yUG9wdWxhcml0aWVzIDwtIGF2ZXJhZ2VQb3B1bGFyaXRpZXMKCiMgRGVmaW5lIGltcG9ydGFudCBjb2x1bW5zIGZvciBjbHVzdGVyIGFsZ29yaXRobXMKaW1wb3J0YW50Q29scyA8LSBjKCJidWRnZXQiLCAicmV2ZW51ZSIsICJwb3B1bGFyaXR5IiwgInZvdGVBdmciLCAidm90ZUNvdW50IiwgImdlbnJlc0Ftb3VudCIsICJwcm9kdWN0aW9uQ29BbW91bnQiLCAicHJvZHVjdGlvbkNvdW50cmllc0Ftb3VudCIsICJhY3RvcnNBbW91bnQiICwgImNhc3RXb21lbkFtb3VudCIsICJjYXN0TWVuQW1vdW50IiwgInJlbGVhc2VZZWFyIiwgInJlbGVhc2VNb250aCIpCgpgYGAKCgojIyAxIFByZXBvY2VzYW1pZW50bwoKYGBge3J9CmBgYAoKIyMgMiBUZW5kZW5jaWEgZGUgQWdydXBhbWllbnRvCgojIyMgSG9wa2lucwoKCg==</div>
 
 
 
