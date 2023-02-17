@@ -35,6 +35,7 @@ movies$releaseMonth = months
 splittedPopularities <- strsplit(movies$actorsPopularity, "\\|")
 averagePopularities <- unlist(lapply(lapply(splittedPopularities, as.numeric), mean))
 movies$averageActorPopularities <- averagePopularities
+movies <- na.omit(movies)
 ```
 Resumen de columnas a utilizar para Clustering:
 
@@ -49,7 +50,7 @@ print(summary(movies[,importantCols]))
 
 ``` {r}
 # Define important columns for Hopkins and VAT
-importantCols <- c("budget", "revenue", "popularity", "voteAvg", "genresAmount","releaseYear", "releaseMonth", "averageActorPopularities")
+importantCols <- c("budget", "revenue", "popularity", "voteAvg", "genresAmount","releaseYear", "releaseMonth", "actorsAmount", "averageActorPopularities")
 
 ```
 
@@ -65,10 +66,17 @@ El resultado del test de Hopkins es `r hopkins_statistic`, el valor es cercano a
 
 ```{r}
 #Matriz de distancia
-datos_dist<- dist(movies[1:1000, importantCols[1:3]])
+datos_dist<- dist(movies[1:1000, importantCols])
 fviz_dist(datos_dist, show_labels = F, gradient = list(low = "#000000", mid = "white", high = "#FC4E3F"))
 ```
 El VAT si demuestra patrones de agrupamiento, por lo que podemos confiar en el resultado del test de Hopkins.
 
+## Determinar el numero de clusters adecuado
 
 
+```{r metodo de codo factoextra}
+
+fviz_nbclust(movies[, importantCols], kmeans, method = "wss") +
+labs(subtitle = "Elbow method")
+```
+El número óptimo de clusters es 3. FALTA EXPANDIR
