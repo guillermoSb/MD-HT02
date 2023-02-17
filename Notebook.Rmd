@@ -70,8 +70,8 @@ El resultado del test de Hopkins es `r hopkins_statistic`, el valor es cercano a
 
 ```{r}
 #Matriz de distancia
-datos_dist<- dist(movies[1:1000, importantCols])
-fviz_dist(datos_dist, show_labels = F, gradient = list(low = "#000000", mid = "white", high = "#FC4E3F"))
+datos_dist <- dist(movies[, importantCols])
+fviz_dist(datos_dist, show_labels = F, gradient = list(low = "#000000", mid = "blue", high = "#FC4E3F"))
 ```
 El VAT si demuestra patrones de agrupamiento, por lo que podemos confiar en el resultado del test de Hopkins.
 
@@ -83,17 +83,27 @@ El VAT si demuestra patrones de agrupamiento, por lo que podemos confiar en el r
 fviz_nbclust(movies[, importantCols], kmeans, method = "wss") +
 labs(subtitle = "Elbow method")
 ```
-El número óptimo de clusters es 2.
+El número óptimo de clusters es 3.
+
+```{r}
+n_clusters <- 3
+```
+
+```{r kmedias}
+fviz_nbclust(cols_norm, kmeans, method = "silhouette")
+fviz_nbclust(cols_norm, kmeans, method = "gap")
+```
 
 ## 4. Clustering
 
 ### K-Means
 ```{r kmedias}
-km <- kmeans(cols_norm, centers = 2, iter.max = 100) 
+km <- kmeans(cols_norm, centers = n_clusters, iter.max = 100) 
+km$size
 ```
 
 ```{r}
-km
+movies$clusterKM <- km$cluster
 ```
 
 ```{r}
@@ -105,7 +115,24 @@ fviz_cluster(km, cols_norm)
 ```{r}
 hc<-hclust(datos_dist, method = "ward.D2") #Genera cluster jerarquico
 plot(hc, cex=0.5, axes=FALSE) #Genera el dendograma
-rect.hclust(hc,k=2)
+rect.hclust(hc,k=n_clusters)
+```
+``` {r}
+groupsHC<-cutree(hc,k=n_clusters) 
+movies$clusterHC <- groupsHC
+```
+
+## 5 Comparacion de resultados
+
+
+Tamaño de cada cluster con K medias
+```{r}
+table(movies$clusterKM)
+```
+
+Tamaño de cada cluster con K HC
+```{r}
+table(movies$clusterHC)
 ```
 
 
