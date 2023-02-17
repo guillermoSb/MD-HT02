@@ -103,7 +103,7 @@ fviz_cluster(km, cols_norm)
 ### Clustering Jerarquico
 
 ```{r}
-hc<-hclust(datos_dist, method = "ward.D2") #Genera cluster jerarquico
+hc<-hclust(distancia_prueba, method = "ward.D2") #Genera cluster jerarquico
 plot(hc, cex=0.5, axes=FALSE) #Genera el dendograma
 rect.hclust(hc,k=2)
 
