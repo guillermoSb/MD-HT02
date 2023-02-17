@@ -19,6 +19,7 @@ library(hopkins) #Para revisar si vale la pena hacer agrupamiento
 library(GGally) #Para hacer el conjunto de graficos
 library(FeatureImpCluster) #Para revisar la importancia de las variables en los grupos.
 library(pheatmap) #Para hacer mapa de calor
+library(dplyr)
 
 ```
 
@@ -54,7 +55,7 @@ print(summary(movies[,importantCols]))
 # Define important columns for Hopkins and VAT
 importantCols <- c("budget", "revenue", "popularity", "voteAvg", "genresAmount","releaseYear", "releaseMonth", "actorsAmount", "averageActorPopularities")
 # Normalizar variables numericas
-movies[,importantCols] <- mutate_if(movies[,importantCols], is.numeric, scale)
+cols_norm <- movies[,importantCols] <- mutate_if(movies[,importantCols], is.numeric, scale)
 ```
 
 ### Hopkins
@@ -83,3 +84,30 @@ fviz_nbclust(movies[, importantCols], kmeans, method = "wss") +
 labs(subtitle = "Elbow method")
 ```
 El número óptimo de clusters es 4. FALTA EXPANDIR
+
+## 4. Clustering
+
+### K-Means
+```{r kmedias}
+km <- kmeans(cols_norm, centers = 4, iter.max = 100) 
+```
+
+```{r}
+km
+```
+
+```{r}
+fviz_cluster(km, cols_norm)
+```
+
+### Clustering Jerarquico
+
+```{r}
+hc <- hc(dist(cols_norm), method = "complete")
+fit <- cutree(hc, k = 4)
+```
+
+```{r}
+fviz_cluster(fit, cols_norm)
+```
+
