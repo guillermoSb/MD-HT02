@@ -74,7 +74,7 @@ fviz_dist(datos_dist, show_labels = F, gradient = list(low = "#000000", mid = "w
 ```
 El VAT si demuestra patrones de agrupamiento, por lo que podemos confiar en el resultado del test de Hopkins.
 
-## Determinar el numero de clusters adecuado
+## 3 Determinar el numero de clusters adecuado
 
 
 ```{r metodo de codo factoextra}
