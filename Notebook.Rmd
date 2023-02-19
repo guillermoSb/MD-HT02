@@ -136,3 +136,28 @@ table(movies$clusterHC)
 ```
 
 
+```{r}
+variables_eliminadas <- c("id", "genres", "homePage", "productionCompany", "productionCompanyCountry", "productionCountry", "director", "video", "actors", "actorsCharacters", "originalTitle", "title", "originalLang")
+
+# create a vector of values for the second column
+razon <- c("Porque este es el identificador de la película, este no es relevante y no servirá tomarlo en cuenta.", 
+           "Esta variable solo dice cuál es el género de cada película y no suele aportar información relevante y no es un valor numérico que aporte.", 
+           "No es una variable continua porque solo provee el valor de un enlace a una página web. Sería considerada una variable categórica nominal.", 
+           "Indica información sobre la producción de la película y son variables categóricas nominales.", 
+           "Indica información sobre la producción de la película y son variables categóricas nominales.", 
+           "Indica información sobre la producción de la película y son variables categóricas nominales.", 
+           "Indica el nombre de un director y es considerada una variable categórica nominal.", 
+           "Únicamente es una variable booleana.", 
+           "Menciona todos los actores que participaron en la película.  No aporta en las métricas de dicha película.",
+           "Provee solamente el rol de un actor", 
+           "No es un valor numérico y es un valor único por película.", 
+           "No es un valor numérico y es un valor único por película.", 
+           "Es una variable categórica, a parte, son pocas opciones. Usualmente todas tienen el valor en.")
+
+# create a data frame with the two columns
+my_table <- data.frame(variables_eliminadas, razon)
+
+# print the table
+my_table
+```
+
