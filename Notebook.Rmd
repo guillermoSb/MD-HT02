@@ -1,6 +1,9 @@
 ---
 title: "Hoja de Trabajo 02"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
+  word_document: default
 ---
 
 # Hoja de Trabajo 02
@@ -37,29 +40,52 @@ movies$releaseMonth = months
 splittedPopularities <- strsplit(movies$actorsPopularity, "\\|")
 averagePopularities <- unlist(lapply(lapply(splittedPopularities, as.numeric), mean))
 movies$averageActorPopularities <- averagePopularities
-movies <- na.omit(movies)
 
 ```
 Resumen de columnas a utilizar para Clustering:
+```{r 1}
+variables_eliminadas <- c("id", "genres", "homePage", "productionCompany", "productionCompanyCountry", "productionCountry", "director", "video", "actors", "actorsCharacters", "originalTitle", "title", "originalLang")
 
-```{r}
+# create a vector of values for the second column
+razon <- c("Porque este es el identificador de la película, este no es relevante y no servirá tomarlo en cuenta.", 
+           "Esta variable solo dice cuál es el género de cada película y no suele aportar información relevante y no es un valor numérico que aporte.", 
+           "No es una variable continua porque solo provee el valor de un enlace a una página web. Sería considerada una variable categórica nominal.", 
+           "Indica información sobre la producción de la película y son variables categóricas nominales.", 
+           "Indica información sobre la producción de la película y son variables categóricas nominales.", 
+           "Indica información sobre la producción de la película y son variables categóricas nominales.", 
+           "Indica el nombre de un director y es considerada una variable categórica nominal.", 
+           "Únicamente es una variable booleana.", 
+           "Menciona todos los actores que participaron en la película.  No aporta en las métricas de dicha película.",
+           "Provee solamente el rol de un actor", 
+           "No es un valor numérico y es un valor único por película.", 
+           "No es un valor numérico y es un valor único por película.", 
+           "Es una variable categórica, a parte, son pocas opciones. Usualmente todas tienen el valor en.")
+
+
+table <- data.frame(variables_eliminadas, razon)
+table
+```
+
+```{r 2}
+# Define important columns for Hopkins and VAT
+importantCols <- c("budget", "revenue", "popularity", "voteAvg", "genresAmount","releaseYear", "releaseMonth", "actorsAmount")
+movies <- movies[,importantCols]
+for (col in importantCols) {
+  avg <- mean(movies[,col], na.rm = TRUE)
+  movies[is.na(col)] <- avg
+}
 print(summary(movies[,importantCols]))
 ```
 
 
-
-
 ## 2 Tendencia de Agrupamiento
 
-``` {r}
-# Define important columns for Hopkins and VAT
-importantCols <- c("budget", "revenue", "popularity", "voteAvg", "genresAmount","releaseYear", "releaseMonth", "actorsAmount", "averageActorPopularities")
-# Normalizar variables numericas
+``` {r 3, echo = FALSE, cache=TRUE}
 cols_norm <- movies[,importantCols] <- mutate_if(movies[,importantCols], is.numeric, scale)
 ```
 
 ### Hopkins
-```{r}
+```{r 4}
 seed <- 1407
 set.seed(seed)
 hopkins_statistic<- hopkins(movies[, importantCols], m=1000)
@@ -67,10 +93,13 @@ hopkins_statistic<- hopkins(movies[, importantCols], m=1000)
 El resultado del test de Hopkins es `r hopkins_statistic`, el valor es cercano a 1, según la librería que se está utilizando esto indica una tendencia a clustering alta.
 
 ### VAT
-
-```{r}
-#Matriz de distancia
+```{r 5, echo = FALSE}
 datos_dist <- dist(movies[, importantCols])
+```
+
+```{r 6, cache=TRUE}
+#Matriz de distancia
+
 fviz_dist(datos_dist, show_labels = F, gradient = list(low = "#000000", mid = "blue", high = "#FC4E3F"))
 ```
 El VAT si demuestra patrones de agrupamiento, por lo que podemos confiar en el resultado del test de Hopkins.
@@ -89,17 +118,17 @@ El número óptimo de clusters es 3.
 n_clusters <- 3
 ```
 
-```{r kmedias}
+Analizando el número de Clusters utilizando otros metodos.
+```{r}
 fviz_nbclust(cols_norm, kmeans, method = "silhouette")
 fviz_nbclust(cols_norm, kmeans, method = "gap")
 ```
+Estas gráficas indican que el número más adecuado de clusters es 3.
 
 ## 4. Clustering
-
 ### K-Means
 ```{r kmedias}
 km <- kmeans(cols_norm, centers = n_clusters, iter.max = 100) 
-km$size
 ```
 
 ```{r}
@@ -124,15 +153,72 @@ movies$clusterHC <- groupsHC
 
 ## 5 Comparacion de resultados
 
-
 Tamaño de cada cluster con K medias
 ```{r}
 table(movies$clusterKM)
 ```
 
-Tamaño de cada cluster con K HC
+Tamaño de cada cluster con HC
 ```{r}
 table(movies$clusterHC)
 ```
 
+
+### Silueta para Kmeans
+``` {r}
+silkm<-silhouette(km$cluster,datos_dist)
+mean(silkm[,3])
+```
+### Silueta para agrupamiento jerarquico
+```{r}
+silhc<-silhouette(groupsHC,datos_dist)
+mean(silhc[,3])
+```
+  
+La silueta para Kmeadias es de `{r} mean(silkm[,3])`. Mientras que para el algoritmo de Agrupamiento Jerárquico es `${r} mean(silhc[,3])`. Dado que la silueta para orden Jerárquico es mayor, se utilizará esa para interpretar los valores.
+  
+## 6. Interpretación de los datos
+
+
+``` {r interpretacion de datos}
+original_data <- read.csv("movies.csv")
+original_data$clusterHC <- movies$clusterHC
+
+years <- c(as.POSIXlt(original_data$releaseDate)$year + 1900)
+months <- c(as.POSIXlt(original_data$releaseDate)$mon + 1)
+original_data$releaseYear = years
+original_data$releaseMonth = months
+
+cluster_1 <- original_data[original_data$clusterHC == 1,]
+cluster_2 <- original_data[original_data$clusterHC == 2,]
+cluster_3 <- original_data[original_data$clusterHC == 3,]
+```
+
+### Cluster 1
+
+``` {r}
+summary(cluster_1[,c("budget", "revenue", "popularity", "voteAvg", "genresAmount","releaseYear", "releaseMonth", "actorsAmount")])
+```
+
+- Peliculas en donde el 50% tienen un indice de popularidad amyor a 20.834
+- Un 30% tuvo un budget arriba de 15,450,000 dólares.
+- Un 30% obtuvieron una ganancia por arriba de los 31,120,344 dólares
+
+### Cluster 2
+``` {r}
+summary(cluster_2[,c("budget", "revenue", "popularity", "voteAvg", "genresAmount","releaseYear", "releaseMonth", "actorsAmount")])
+```
+- Peliculas en donde el 50% tienen un indice de popularidad mayor a 80.060
+- Un 30% tuvo una ganancia arriba de 600,000,000 dólares.
+- Un 30% tuvieron un presupuesto por arriba de los 165,000,000 dólares.
+- Un 50% de las peliculas fueron lanzadas luego del 2011
+- Un 50% de las peliculas tienen al menos 3 géneros.
+- Este es el cluster con películas más exitosas económicamente, esto puede ser porque un 50% tiene más de 3 géneros, lo que atrae más espectadores.
+
+### Cluster 3
+``` {r}
+summary(cluster_3[,c("budget", "revenue", "popularity", "voteAvg", "genresAmount","releaseYear", "releaseMonth", "actorsAmount")])
+```
+- Peliculas en donde el 50% tienen un indice de popularidad menor a 26
+- Este es el cluster con mayor cantidad de actores, con una mediana de 640097 personas.
 
